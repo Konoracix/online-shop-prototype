@@ -1,0 +1,18 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+                   <entity name="App\Model\User\User" table="public.user" >
+                        <id name="id" type="uuid"/>
+                        <field name="firstName" type="string"/>
+                        <field name="lastName" type="string"/>
+                        <field name="dateOfBirth" type="datetime_immutable"/>
+
+                        <many-to-one field="homeAdress" target-entity="App\Model\Location\Adress">
+                              <join-column nullable="false" />
+                              <cascade>
+                                   <cascade-persist/>
+                              </cascade>
+                        </many-to-one>
+                   </entity>
+</doctrine-mapping>

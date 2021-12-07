@@ -1,0 +1,20 @@
+get:
+    path: /orders
+    controller: App\Controller\OrderController::getAction
+    methods: GET 
+post:
+    path: /orders
+    controller: App\Controller\OrderController::postAction
+    methods: POST
+getOne:
+    path: /orders/{id}
+    controller: App\Controller\OrderController::getOneAction
+    methods: GET
+put:
+    path: /orders/{id}
+    controller: App\Controller\OrderController::putAction
+    methods: PUT
+delete:
+    path: /orders/{id}
+    controller: App\Controller\OrderController::deleteAction
+    methods: DELETE

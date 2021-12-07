@@ -1,0 +1,28 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                   https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+                   <entity name="App\Model\Order\Order" table="public.order" >
+                        <id name="id" type="uuid"/>
+                        <field name="price" type="integer"/>
+                        <field name="deliveryTime" type="datetime_immutable" nullable="true"/>
+                        <field name="orderPlacementTime" type="datetime_immutable"/>
+                        <field name="deletedAt" type="datetime" nullable="true"/>
+                        <gedmo:soft-deleteable field-name="deletedAt" time-aware="false" hard-delete="false" />
+
+                        <many-to-one field="recipient" target-entity="App\Model\User\User">
+                              <join-column nullable="false" />
+                              <cascade>
+                                   <cascade-persist/>
+                              </cascade>
+                        </many-to-one>
+
+                        <many-to-one field="deliveryAdress" target-entity="App\Model\Location\Adress">
+                              <join-column nullable="false" />
+                              <cascade>
+                                   <cascade-persist/>
+                              </cascade>
+                        </many-to-one>
+                   </entity>
+</doctrine-mapping>
