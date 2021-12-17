@@ -81,7 +81,7 @@ class OrderController{
 
 	private function createOrderFromRequest(Request $request): Order {
 		$data = $request->toArray();
-		if ($this->isUuidV4($data['user']['adress']['id']))
+		if ($this->isUuidV4($data['user']['adress']['id']) && $this->isUuidV4($data['user']['id']) && $this->isUuidV4($data['id']))
 		{
 		$adress = new Adress($data['user']['adress']['country'], $data['user']['adress']['city'], $data['user']['adress']['street'], $data['user']['adress']['houseNumber'], NULL, NULL, Uuid::fromString($data['user']['adress']['id']));
 		$dateOfBirth = new \DateTimeImmutable($data['user']['dateOfBirth']);
@@ -110,10 +110,7 @@ class OrderController{
 	private function isUuidV4($uuid) 
 	{
 		$uuidCheck = Uuid::fromString($uuid);
-		if($uuidCheck instanceof UuidV4) {
-			return true;
-		}
-		return false;
+		return ($uuidCheck instanceof UuidV4);
 	} 
 }
 ?>
