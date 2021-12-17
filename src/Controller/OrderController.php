@@ -16,6 +16,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 use App\Repository\OrderRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Uid\UuidV4;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class OrderController{
 
@@ -79,14 +81,15 @@ class OrderController{
 
 	private function createOrderFromRequest(Request $request): Order {
 		$data = $request->toArray();
-
-		$adress = new Adress($data['user']['adress']['country'], $data['user']['adress']['city'], $data['user']['adress']['street'], $data['user']['adress']['houseNumber'], NULL, NULL, Uuid::fromString($data['user']['adress']['id']));
-		$dateOfBirth = new \DateTimeImmutable($data['user']['dateOfBirth']);
-		$deliveryTime = new \DateTimeImmutable($data['deliveryTime']);
-		$user = new User($data['user']['firstName'], $data['user']['lastName'], $adress, $dateOfBirth, Uuid::fromString($data['user']['id']));
-		$order = new Order(Uuid::fromString($data['id']), NULL, $data['price'], $user, $adress, $deliveryTime, NULL);
-
-		return $order;
+		if($this->checkUuid($data['id'], $data['user']['id'], $data['user']['adress']['id'])){
+			$adress = new Adress($data['user']['adress']['country'], $data['user']['adress']['city'], $data['user']['adress']['street'], $data['user']['adress']['houseNumber'], NULL, NULL, Uuid::fromString($data['user']['adress']['id']));
+			$dateOfBirth = new \DateTimeImmutable($data['user']['dateOfBirth']);
+			$deliveryTime = new \DateTimeImmutable($data['deliveryTime']);
+			$user = new User($data['user']['firstName'], $data['user']['lastName'], $adress, $dateOfBirth, Uuid::fromString($data['user']['id']));
+			$order = new Order(Uuid::fromString($data['id']), NULL, $data['price'], $user, $adress, $deliveryTime, NULL);
+			return $order;
+		}
+		throw new Exception('Id is not UuidV4');
 	}
 
 	public function deleteAction(string $id): Response {
@@ -101,6 +104,13 @@ class OrderController{
 			Response::HTTP_OK,
 			['Content-Type' => 'application/json; charset=utf-8']
 		);
+	}
+
+	private function checkUuid($order_id, $recipient_id, $delivery_adress_id):bool{
+		$id = Uuid::fromString($order_id);
+		$recipientId = Uuid::fromString($recipient_id);
+		$deliveryAdressId = Uuid::fromString($delivery_adress_id);
+		return $id instanceof UuidV4 && $recipientId instanceof UuidV4 && $deliveryAdressId instanceof UuidV4 ? true : false;
 	}
 }
 ?>
