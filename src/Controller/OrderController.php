@@ -51,6 +51,9 @@ class OrderController extends Controller{
 	}
 
 	public function getOneAction(string $id): Response{
+		if(!$this->isUuidV4($id)) {
+			throw new Exception('Given Uuid is not V4 type');
+		}
 		$uuid = Uuid::fromString($id);
 		$order = $this->orderRepository->find($uuid);
 		if(!$order instanceof Order){
@@ -90,7 +93,7 @@ class OrderController extends Controller{
 
 		return $order;
 		}
-		throw new Exception('Uuid is not V4');
+		throw new Exception('One or more of the Uuids given for order creation are not V4 type');
 	}
 
 	public function deleteAction(string $id): Response {
