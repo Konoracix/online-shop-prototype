@@ -19,17 +19,16 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
-class OrderController{
+class OrderController extends Controller{
 
-	private SerializerInterface $serializer;
 	private OrderRepository $orderRepository;
 
 	public function __construct(SerializerInterface $serializer, OrderRepository $orderRepository) {
-		$this->serializer = $serializer;
+		parent::__construct($serializer);
 		$this->orderRepository = $orderRepository;
 	}
 
-	public function getAction(Request $request){
+	public function getAction(Request $request): Response{
 		$filterFactory = new FilterFactory();
 		$queries = new InputBag();
 		$orders = $filterFactory->create($queries, $request, $this->orderRepository, 'price');
@@ -39,7 +38,7 @@ class OrderController{
 			['Content-Type' => 'application/json; charset=utf-8']
 		);
 	}
-	public function postAction(Request $request){
+	public function postAction(Request $request): Response{
 		
 		$order = $this->createOrderFromRequest($request);
 
@@ -51,7 +50,7 @@ class OrderController{
 		);
 	}
 
-	public function getOneAction(string $id){
+	public function getOneAction(string $id): Response{
 		$uuid = Uuid::fromString($id);
 		$order = $this->orderRepository->find($uuid);
 		if(!$order instanceof Order){
@@ -64,7 +63,7 @@ class OrderController{
 		);
 	}
 
-	public function putAction(string $id, Request $request) {
+	public function putAction(string $id, Request $request): Response {
 		$uuid = Uuid::fromString($id);
 		$order = $this->orderRepository->find($uuid);
 		if(!$order instanceof Order) {
@@ -107,10 +106,5 @@ class OrderController{
 			['Content-Type' => 'application/json; charset=utf-8']
 		);
 	}
-	private function isUuidV4($uuid) 
-	{
-		$uuidCheck = Uuid::fromString($uuid);
-		return ($uuidCheck instanceof UuidV4);
-	} 
 }
 ?>
