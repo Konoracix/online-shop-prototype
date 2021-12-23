@@ -16,6 +16,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 use App\Repository\OrderRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Uid\UuidV4;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class OrderController{
 
@@ -79,7 +81,8 @@ class OrderController{
 
 	private function createOrderFromRequest(Request $request): Order {
 		$data = $request->toArray();
-
+		if ($this->isUuidV4($data['user']['adress']['id']) && $this->isUuidV4($data['user']['id']) && $this->isUuidV4($data['id']))
+		{
 		$adress = new Adress($data['user']['adress']['country'], $data['user']['adress']['city'], $data['user']['adress']['street'], $data['user']['adress']['houseNumber'], NULL, NULL, Uuid::fromString($data['user']['adress']['id']));
 		$dateOfBirth = new \DateTimeImmutable($data['user']['dateOfBirth']);
 		$deliveryTime = new \DateTimeImmutable($data['deliveryTime']);
@@ -87,6 +90,8 @@ class OrderController{
 		$order = new Order(Uuid::fromString($data['id']), NULL, $data['price'], $user, $adress, $deliveryTime, NULL);
 
 		return $order;
+		}
+		throw new Exception('Uuid is not V4');
 	}
 
 	public function deleteAction(string $id): Response {
@@ -102,5 +107,10 @@ class OrderController{
 			['Content-Type' => 'application/json; charset=utf-8']
 		);
 	}
+	private function isUuidV4($uuid) 
+	{
+		$uuidCheck = Uuid::fromString($uuid);
+		return ($uuidCheck instanceof UuidV4);
+	} 
 }
 ?>
