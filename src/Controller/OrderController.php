@@ -51,6 +51,9 @@ class OrderController extends Controller{
 	}
 
 	public function getOneAction(string $id): Response{
+		if(!$this->isUuidV4($id)) {
+			throw new Exception('Given Uuid is not V4 type');
+		}
 		$uuid = Uuid::fromString($id);
 		$order = $this->orderRepository->find($uuid);
 		if(!$order instanceof Order){
@@ -80,8 +83,10 @@ class OrderController extends Controller{
 
 	private function createOrderFromRequest(Request $request): Order {
 		$data = $request->toArray();
-		if ($this->isUuidV4($data['user']['adress']['id']) && $this->isUuidV4($data['user']['id']) && $this->isUuidV4($data['id']))
+		if (!($this->isUuidV4($data['user']['adress']['id']) && $this->isUuidV4($data['user']['id']) && $this->isUuidV4($data['id'])))
 		{
+			throw new Exception('One or more of the Uuids given for order creation are not V4 type');
+		}
 		$adress = new Adress($data['user']['adress']['country'], $data['user']['adress']['city'], $data['user']['adress']['street'], $data['user']['adress']['houseNumber'], NULL, NULL, Uuid::fromString($data['user']['adress']['id']));
 		$dateOfBirth = new \DateTimeImmutable($data['user']['dateOfBirth']);
 		$deliveryTime = new \DateTimeImmutable($data['deliveryTime']);
@@ -89,8 +94,6 @@ class OrderController extends Controller{
 		$order = new Order(Uuid::fromString($data['id']), NULL, $data['price'], $user, $adress, $deliveryTime, NULL);
 
 		return $order;
-		}
-		throw new Exception('Uuid is not V4');
 	}
 
 	public function deleteAction(string $id): Response {
