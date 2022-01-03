@@ -29,5 +29,16 @@
 			$uuidCheck = Uuid::fromString($uuid);
 			return ($uuidCheck instanceof UuidV4);
 		} 
+		
+		/**
+		 * @param object[]|object $data
+		 */
+		protected function createResponse($data, int $httpCode): Response { 
+			return new Response(
+				$this->serializer->serialize($data, 'json'),
+				$httpCode,
+				['Content-Type' => 'application/json; charset=utf-8']
+			);
+		}
 	}
 ?>
