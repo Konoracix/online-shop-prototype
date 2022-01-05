@@ -32,22 +32,16 @@ class OrderController extends Controller{
 		$filterFactory = new FilterFactory();
 		$queries = new InputBag();
 		$orders = $filterFactory->create($queries, $request, $this->orderRepository, 'price');
-		return new Response(
-			$this->serializer->serialize($orders, 'json'),
-			Response::HTTP_OK,
-			['Content-Type' => 'application/json; charset=utf-8']
-		);
+
+		return $this->createResponse($orders, Response::HTTP_OK);
 	}
 	public function postAction(Request $request): Response{
 		
 		$order = $this->createOrderFromRequest($request);
 
 		$this->orderRepository->saveObject($order);
-		return new Response(
-			$this->serializer->serialize($order, 'json'),
-			Response::HTTP_OK,
-			['Content-Type' => 'application/json; charset=utf-8']
-		);
+
+		return $this->createResponse($order, Response::HTTP_CREATED);
 	}
 
 	public function getOneAction(string $id): Response{
@@ -59,11 +53,8 @@ class OrderController extends Controller{
 		if(!$order instanceof Order){
 			throw new NotFoundHttpException();
 		}
-		return new Response(
-			$this->serializer->serialize($order, 'json'),
-			Response::HTTP_OK,
-			['Content-Type' => 'application/json; charset=utf-8']
-		);
+
+		return $this->createResponse($order, Response::HTTP_OK);
 	}
 
 	public function putAction(string $id, Request $request): Response {
@@ -74,11 +65,8 @@ class OrderController extends Controller{
 		}
 		$updatedOrder = $this->createOrderFromRequest($request);
 		$this->orderRepository->saveObject($order->update($updatedOrder));
-		return new Response(
-			$this->serializer->serialize($updatedOrder, 'json'),
-			Response::HTTP_OK,
-			['Content-Type' => 'application/json; charset=utf-8']
-		);
+
+		return $this->createResponse($updatedOrder, Response::HTTP_OK);
 	}
 
 	private function createOrderFromRequest(Request $request): Order {
@@ -103,11 +91,7 @@ class OrderController extends Controller{
 			throw new NotFoundHttpException;
 		}
 		$this->orderRepository->deleteObject($order);
-		return new Response(
-			'',
-			Response::HTTP_OK,
-			['Content-Type' => 'application/json; charset=utf-8']
-		);
+		return $this->createResponse($order, Response::HTTP_OK);
 	}
 }
 ?>
