@@ -21,7 +21,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 
 class OrderController extends Controller{
 
-	private OrderRepository $orderRepository;
+	protected OrderRepository $orderRepository;
 
 	public function __construct(SerializerInterface $serializer, OrderRepository $orderRepository) {
 		parent::__construct($serializer);
@@ -35,6 +35,7 @@ class OrderController extends Controller{
 
 		return $this->createResponse($orders, Response::HTTP_OK);
 	}
+
 	public function postAction(Request $request): Response{
 		
 		$order = $this->createOrderFromRequest($request);

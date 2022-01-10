@@ -6,8 +6,9 @@
 	use Symfony\Component\Uid\UuidV4;
 	use Symfony\Component\HttpFoundation\Response;
 	use Symfony\Component\HttpFoundation\Request;
+	use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-	abstract class Controller{
+	abstract class Controller extends AbstractController{
 
 		protected SerializerInterface $serializer;
 

@@ -1,0 +1,40 @@
+body{
+	font-family: 'Montserrat', sans-serif;
+	font-size: 30px;
+}
+table.data{
+	display: block;
+	position: relative;
+	width: 970px;
+}
+table.data::after{
+	content: "";  
+	opacity: 0.5;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	position: absolute;
+	z-index: -1;   
+	background: url("../img/shrek2.png") no-repeat;
+	background-size: 100% 100%;
+}
+td{
+	border: 1px solid black;
+	padding: 5px;
+	margin: 0 !important;
+	border-radius: 5px;
+	text-align: center;
+	transition: all .5s ease-in-out;
+}
+td:hover{
+	background-color: rgb(33, 237, 217, 0.5);
+	text-shadow: 0 0 3px #fff, 0 0 1px #fff, 0 0 5px #fff;
+	/*text-shadow: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff;*/
+}
+td.id{
+	min-width: 800px;
+}
+td.price{
+	min-width: 150px;
+}

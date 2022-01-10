@@ -18,3 +18,8 @@ delete:
     path: /orders/{id}
     controller: App\Controller\OrderController::deleteAction
     methods: DELETE
+
+getView:
+    path: /ViewOrders
+    controller: App\Controller\UIController::getAction
+    methods: GET
