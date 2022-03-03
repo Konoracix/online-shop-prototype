@@ -1,6 +1,7 @@
 FROM php:7.4-apache
 RUN apt-get update && apt-get -y install \
 apt-transport-https \
+zip \
 ca-certificates \
 libpq-dev \
 libyaml-dev
@@ -11,6 +12,7 @@ RUN pecl install yaml
 COPY --from=composer:2.2.6 /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV COMPOSER_NO_INTERACTION=1
-COPY apache-site.conf /etc/apache2/sites-available/000-default.conf
-COPY ./ .
+COPY docker/apache-site.conf /etc/apache2/sites-available/000-default.conf
+COPY . .
+RUN composer install
 CMD ["apache2-foreground"]
