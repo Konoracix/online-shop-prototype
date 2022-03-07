@@ -1,0 +1,34 @@
+version: '3'
+services: 
+  online-shop-prototype:
+    build: 
+      context: '../'
+      dockerfile: ./Dockerfile
+    volumes: 
+      - '../.:/var/www/html'
+    env_file: '../.env'
+    networks:
+      online-shop-network:
+        ipv4_address: 123.12.12.100
+    depends_on:  
+      - shop-db
+  shop-db:
+    image: postgres
+    environment:
+      - ROOT_PASSWORD=root_password
+      - DATABASE=database
+      - USER=admin
+      - PASSWORD=password
+      - POSTGRES_PASSWORD=password
+    volumes: 
+      - shop-db-data:/var/lib/postgresql/data
+    env_file: '../.env'
+    networks:
+      online-shop-network:
+        ipv4_address: 123.12.12.101
+
+networks: 
+  online-shop-network:
+    external: true
+volumes: 
+  shop-db-data: 
