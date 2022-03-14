@@ -15,11 +15,8 @@ services:
   shop-db:
     image: postgres
     environment:
-      - ROOT_PASSWORD=root_password
-      - DATABASE=database
-      - USER=admin
-      - PASSWORD=password
       - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
     volumes: 
       - shop-db-data:/var/lib/postgresql/data
     env_file: '../.env'
