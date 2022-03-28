@@ -14,5 +14,5 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV COMPOSER_NO_INTERACTION=1
 COPY docker/apache-site.conf /etc/apache2/sites-available/000-default.conf
 COPY . .
-RUN composer install
+ENTRYPOINT ["./entrypoint.sh"]
 CMD ["apache2-foreground"]
